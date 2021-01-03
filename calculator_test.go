@@ -6,17 +6,15 @@ import (
 	"testing"
 )
 
+func TestDivide(t *testing.T) {
+	t.Parallel()
+
 type testCase struct {
 	name        string
 	a, b        float64
 	want        float64
 	errExpected bool
 }
-
-func TestDivide(t *testing.T) {
-	t.Parallel()
-
-	prefix := "%s: Divide(%f, %f): "
 
 	testCases := []testCase{
 		{
@@ -53,6 +51,8 @@ func TestDivide(t *testing.T) {
 		},
 	}
 
+	prefix := "%s: Divide(%f, %f): "
+
 	for _, tc := range testCases {
 		got, err := calculator.Divide(tc.a, tc.b)
 		errReceived := err != nil
@@ -83,6 +83,12 @@ func TestDivideRandom(t *testing.T) {
 
 func TestMultiply(t *testing.T) {
 	t.Parallel()
+
+	type testCase struct {
+		name string
+		a, b float64
+		want float64
+	}
 
 	testCases := []testCase{
 		{
@@ -135,6 +141,12 @@ func TestMultiplyRandom(t *testing.T) {
 func TestAdd(t *testing.T) {
 	t.Parallel()
 
+	type testCase struct {
+		name string
+		a, b float64
+		want float64
+	}
+
 	testCases := []testCase{
 		{
 			name: "Zero add positive is positive",
@@ -181,6 +193,12 @@ func TestAddRandom(t *testing.T) {
 
 func TestSubtract(t *testing.T) {
 	t.Parallel()
+
+	type testCase struct {
+		name string
+		a, b float64
+		want float64
+	}
 
 	testCases := []testCase{
 		{

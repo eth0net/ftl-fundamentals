@@ -2,6 +2,7 @@ package calculator_test
 
 import (
 	"calculator"
+	"math"
 	"math/rand"
 	"testing"
 )
@@ -9,12 +10,12 @@ import (
 func TestDivide(t *testing.T) {
 	t.Parallel()
 
-type testCase struct {
-	name        string
-	a, b        float64
-	want        float64
-	errExpected bool
-}
+	type testCase struct {
+		name        string
+		a, b        float64
+		want        float64
+		errExpected bool
+	}
 
 	testCases := []testCase{
 		{
@@ -76,7 +77,7 @@ func TestDivideRandom(t *testing.T) {
 			t.Fatalf("TestDivideRandom(%f, %f): Unexpected error status: %b", a, b, err)
 		}
 		if b != 0 && got != want {
-			t.Fatalf("TestDivideRandom(%f, %f): got %f, want %f", a, b, got, want)
+			t.Fatalf("TestDivideRandom(%f, %f): want %f, got %f", a, b, want, got)
 		}
 	}
 }
@@ -133,7 +134,7 @@ func TestMultiplyRandom(t *testing.T) {
 		want := a * b
 		got := calculator.Multiply(a, b)
 		if b != 0 && got != want {
-			t.Fatalf("TestMultiplyRandom(%f, %f): got %f, want %f", a, b, got, want)
+			t.Fatalf("TestMultiplyRandom(%f, %f): want %f, got %f", a, b, want, got)
 		}
 	}
 }
@@ -186,7 +187,7 @@ func TestAddRandom(t *testing.T) {
 		want := a + b
 		got := calculator.Add(a, b)
 		if b != 0 && got != want {
-			t.Fatalf("TestAddRandom(%f, %f): got %f, want %f", a, b, got, want)
+			t.Fatalf("TestAddRandom(%f, %f): want %f, got %f", a, b, want, got)
 		}
 	}
 }
@@ -242,8 +243,51 @@ func TestSubtractRandom(t *testing.T) {
 		a, b := rand.Float64()*100, rand.Float64()*100
 		want := a - b
 		got := calculator.Subtract(a, b)
-		if b != 0 && got != want {
-			t.Fatalf("TestSubtractRandom(%f, %f): got %f, want %f", a, b, got, want)
+		if b != 0 && want != got {
+			t.Fatalf("TestSubtractRandom(%f, %f): want %f, got %f", a, b, want, got)
+		}
+	}
+}
+
+func TestSqrt(t *testing.T) {
+	t.Parallel()
+
+	type testCase struct {
+		name        string
+		input       float64
+		want        float64
+		errExpected bool
+	}
+
+	testCases := []testCase{
+		{
+			name:  "Simple square root",
+			input: 4, want: 2, errExpected: false,
+		},
+		{
+			name:  "Non-integer square root",
+			input: 5, want: math.Sqrt(5), errExpected: false,
+		},
+		{
+			name:  "Square root of non-integer",
+			input: 3.3, want: math.Sqrt(3.3), errExpected: false,
+		},
+		{
+			name:  "Fail with negative input",
+			input: -1, want: 0, errExpected: true,
+		},
+	}
+
+	prefix := "%s: Sqrt(%f): "
+
+	for _, tc := range testCases {
+		got, err := calculator.Sqrt(tc.input)
+		errReceived := err != nil
+		if tc.errExpected != errReceived {
+			t.Fatalf(prefix+"Unexpected error status: %t", tc.name, tc.input, errReceived)
+		}
+		if !tc.errExpected && tc.want != got {
+			t.Fatalf(prefix+"want %f, got %f", tc.name, tc.input, tc.want, got)
 		}
 	}
 }

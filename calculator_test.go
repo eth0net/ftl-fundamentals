@@ -59,7 +59,7 @@ func TestDivide(t *testing.T) {
 			t.Fatalf(prefix+"Unexpected error status: %t", tc.name, tc.a, tc.b, errReceived)
 		}
 		if !tc.errExpected && tc.want != got {
-			t.Errorf(prefix+"want %f, got %f", tc.name, tc.a, tc.b, tc.want, got)
+			t.Fatalf(prefix+"want %f, got %f", tc.name, tc.a, tc.b, tc.want, got)
 		}
 	}
 }

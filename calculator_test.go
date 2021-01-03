@@ -2,6 +2,7 @@ package calculator_test
 
 import (
 	"calculator"
+	"math/rand"
 	"testing"
 )
 
@@ -64,6 +65,22 @@ func TestDivide(t *testing.T) {
 	}
 }
 
+func TestDivideRandom(t *testing.T) {
+	t.Parallel()
+
+	for i := 0; i < 100; i++ {
+		a, b := rand.Float64()*100, rand.Float64()*100
+		want := a / b
+		got, err := calculator.Divide(a, b)
+		if b != 0 && err != nil {
+			t.Fatalf("TestDivideRandom(%f, %f): Unexpected error status: %b", a, b, err)
+		}
+		if b != 0 && got != want {
+			t.Fatalf("TestDivideRandom(%f, %f): got %f, want %f", a, b, got, want)
+		}
+	}
+}
+
 func TestMultiply(t *testing.T) {
 	t.Parallel()
 
@@ -102,6 +119,19 @@ func TestMultiply(t *testing.T) {
 	}
 }
 
+func TestMultiplyRandom(t *testing.T) {
+	t.Parallel()
+
+	for i := 0; i < 100; i++ {
+		a, b := rand.Float64()*100, rand.Float64()*100
+		want := a * b
+		got := calculator.Multiply(a, b)
+		if b != 0 && got != want {
+			t.Fatalf("TestMultiplyRandom(%f, %f): got %f, want %f", a, b, got, want)
+		}
+	}
+}
+
 func TestAdd(t *testing.T) {
 	t.Parallel()
 
@@ -132,6 +162,19 @@ func TestAdd(t *testing.T) {
 		got := calculator.Add(tc.a, tc.b)
 		if tc.want != got {
 			t.Errorf("%s: Add(%f, %f): want %f, got %f", tc.name, tc.a, tc.b, tc.want, got)
+		}
+	}
+}
+
+func TestAddRandom(t *testing.T) {
+	t.Parallel()
+
+	for i := 0; i < 100; i++ {
+		a, b := rand.Float64()*100, rand.Float64()*100
+		want := a + b
+		got := calculator.Add(a, b)
+		if b != 0 && got != want {
+			t.Fatalf("TestAddRandom(%f, %f): got %f, want %f", a, b, got, want)
 		}
 	}
 }
@@ -170,6 +213,19 @@ func TestSubtract(t *testing.T) {
 		got := calculator.Subtract(tc.a, tc.b)
 		if tc.want != got {
 			t.Errorf("%s: Subtract(%f, %f): want %f, got %f", tc.name, tc.a, tc.b, tc.want, got)
+		}
+	}
+}
+
+func TestSubtractRandom(t *testing.T) {
+	t.Parallel()
+
+	for i := 0; i < 100; i++ {
+		a, b := rand.Float64()*100, rand.Float64()*100
+		want := a - b
+		got := calculator.Subtract(a, b)
+		if b != 0 && got != want {
+			t.Fatalf("TestSubtractRandom(%f, %f): got %f, want %f", a, b, got, want)
 		}
 	}
 }

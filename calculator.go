@@ -8,11 +8,19 @@ import (
 
 // Divide takes two numbers and returns the result of dividing the first from
 // the second.
-func Divide(a, b float64) (float64, error) {
-	if b == 0 {
-		return 0, fmt.Errorf("cannot divide by zero")
+func Divide(in ...float64) (out float64, err error) {
+	if len(in) < 2 {
+		return 0, fmt.Errorf("too few values %d, need at least 2", len(in))
 	}
-	return a / b, nil
+
+	out = in[0]
+	for _, n := range in[1:] {
+		if n == 0 {
+			return 0, fmt.Errorf("cannot divide by zero")
+		}
+		out /= n
+	}
+	return out, nil
 }
 
 // Multiply takes two numbers and returns the result of multiplying them

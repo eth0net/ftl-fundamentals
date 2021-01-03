@@ -12,56 +12,60 @@ func TestDivide(t *testing.T) {
 
 	type testCase struct {
 		name        string
-		a, b        float64
+		input       []float64
 		want        float64
 		errExpected bool
 	}
 
 	testCases := []testCase{
 		{
-			name: "Positive divided by positive is positive",
-			a:    1, b: 1, want: 1, errExpected: false,
+			name:  "Positive divided by positive is positive",
+			input: []float64{1, 1}, want: 1, errExpected: false,
 		},
 		{
-			name: "Negative divided by negative is positive",
-			a:    -1, b: -1, want: 1, errExpected: false,
+			name:  "Negative divided by negative is positive",
+			input: []float64{-1, -1}, want: 1, errExpected: false,
 		},
 		{
-			name: "Positive divided by negative is negative",
-			a:    1, b: -1, want: -1, errExpected: false,
+			name:  "Positive divided by negative is negative",
+			input: []float64{1, -1}, want: -1, errExpected: false,
 		},
 		{
-			name: "Negative divided by positive is negative",
-			a:    -1, b: 1, want: -1, errExpected: false,
+			name:  "Negative divided by positive is negative",
+			input: []float64{-1, 1}, want: -1, errExpected: false,
 		},
 		{
-			name: "Positive divided by a fraction is positive",
-			a:    2, b: .5, want: 4, errExpected: false,
+			name:  "Positive divided by a fraction is positive",
+			input: []float64{2, .5}, want: 4, errExpected: false,
 		},
 		{
-			name: "Negative divided by a fraction is negative",
-			a:    -2, b: .5, want: -4, errExpected: false,
+			name:  "Negative divided by a fraction is negative",
+			input: []float64{-2, .5}, want: -4, errExpected: false,
 		},
 		{
-			name: "Positive divided by zero returns an error",
-			a:    2, b: 0, want: 0, errExpected: true,
+			name:  "Positive divided by zero returns an error",
+			input: []float64{2, 0}, want: 0, errExpected: true,
 		},
 		{
-			name: "Negative divided by zero returns an error",
-			a:    -2, b: 0, want: 0, errExpected: true,
+			name:  "Negative divided by zero returns an error",
+			input: []float64{-2, 0}, want: 0, errExpected: true,
+		},
+		{
+			name:  "One value returns an error",
+			input: []float64{1}, want: 0, errExpected: true,
 		},
 	}
 
-	prefix := "%s: Divide(%f, %f): "
+	prefix := "%s: Divide(%v): "
 
 	for _, tc := range testCases {
-		got, err := calculator.Divide(tc.a, tc.b)
+		got, err := calculator.Divide(tc.input...)
 		errReceived := err != nil
 		if tc.errExpected != errReceived {
-			t.Fatalf(prefix+"Unexpected error status: %t", tc.name, tc.a, tc.b, errReceived)
+			t.Fatalf(prefix+"Unexpected error status: %t", tc.name, tc.input, errReceived)
 		}
 		if !tc.errExpected && tc.want != got {
-			t.Fatalf(prefix+"want %f, got %f", tc.name, tc.a, tc.b, tc.want, got)
+			t.Fatalf(prefix+"want %f, got %f", tc.name, tc.input, tc.want, got)
 		}
 	}
 }
